@@ -6,7 +6,7 @@
 /*   By: kokamoto <kokamoto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 11:24:56 by kokamoto          #+#    #+#             */
-/*   Updated: 2024/07/09 19:28:43 by kokamoto         ###   ########.fr       */
+/*   Updated: 2024/07/09 23:29:13 by kokamoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ void	ft_process_not_number(int *n, va_list args, char spe)
 	if (spe == 's')
 	{
 		str = va_arg(args, char *);
+		if (str == NULL)
+			str = "(null)";
 		ft_putstr_fd(str, 1);
 		(*n) += ft_strlen(str);
 	}
@@ -64,16 +66,23 @@ void	ft_process_number(int *n, va_list args, char spe)
 {
 	long long	num;
 
-	num = va_arg(args, int);
+	num = va_arg(args, long long);
 	if (spe == 'd' || spe == 'i')
+	{
+		num = (int)num;
 		ft_putint_fd(num, 1);
+	} else if (spe == 'u' || spe == 'x' || spe == 'X')
+		num = (unsigned int)num;
 	if (spe == 'u')
 		ft_putunsignedint_fd(num, 1);
 	if (spe == 'x')
 		ft_put_uint_hex_fd(num, 1, 'x');
 	if (spe == 'X')
 		ft_put_uint_hex_fd(num, 1, 'X');
-	(*n) += ft_numlen(num);
+	if (spe == 'd' || spe == 'i' || spe == 'u')
+		(*n) += ft_numlen(num);
+	else
+		(*n) += ft_hexlen(num);
 }
 
 void	ft_process(const char **start, const char **format, int *n, va_list args)
@@ -82,7 +91,7 @@ void	ft_process(const char **start, const char **format, int *n, va_list args)
 
 	(*format)++;
 	spe = ft_strchr_n("cspdiuxX%", **format);
-	if (spe == -1) //変換指定子が見つからない場合
+	if (spe == -1)
 	{
 		(*format) = *start;
 		return ;
@@ -113,6 +122,11 @@ int	ft_printf(const char *format, ...)
 			ft_process(&start, &format, &n, args);
 	}
 	va_end(args);
+	if (n == -1)
+	{
+		ft_putstr_fd("Error\n", 1);
+		return (-1);
+	}
 	return (n);
 }
 
@@ -159,10 +173,12 @@ int	ft_printf(const char *format, ...)
 // 	printf(" %d\n", printf("%%"));
 // 	printf(" %d\n\n", ft_printf("%%"));
 // 	return (0);
-// }
 
-int	main(void)
-{
-	printf("%d\n", printf("%p\n", NULL));
-	printf("%d\n", ft_printf("%p\n", NULL));
-}
+// int	main(void)
+// {
+// 	printf("%d\n", printf("%i ", -36));
+// 	printf("%d\n\n\n", ft_printf("%i ", -36));
+// 	printf("%d\n", printf("%i ", 36));
+// 	printf("%d\n\n\n", ft_printf("%i ", 36));
+// 	return (0);	
+// }
