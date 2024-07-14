@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kokamoto <kokamoto@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kokamoto <kokamoto@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 11:24:56 by kokamoto          #+#    #+#             */
-/*   Updated: 2024/07/09 23:29:13 by kokamoto         ###   ########.fr       */
+/*   Updated: 2024/07/14 09:14:13 by kokamoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,23 +23,10 @@ void	ft_print_str(const char **start, const char **format, int *n)
 	*start = *format;
 }
 
-char	ft_strchr_n(const char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	while (*(s + i))
-	{
-		if (*(s + i) == c)
-			return (s[i]);
-		i++;
-	}
-	return (-1);
-}
-
 void	ft_process_not_number(int *n, va_list args, char spe)
 {
-	char *str;
+	char	*str;
+
 	if (spe == 'c')
 	{
 		ft_putchar_fd(va_arg(args, int), 1);
@@ -71,7 +58,8 @@ void	ft_process_number(int *n, va_list args, char spe)
 	{
 		num = (int)num;
 		ft_putint_fd(num, 1);
-	} else if (spe == 'u' || spe == 'x' || spe == 'X')
+	}
+	else if (spe == 'u' || spe == 'x' || spe == 'X')
 		num = (unsigned int)num;
 	if (spe == 'u')
 		ft_putunsignedint_fd(num, 1);
@@ -85,7 +73,8 @@ void	ft_process_number(int *n, va_list args, char spe)
 		(*n) += ft_hexlen(num);
 }
 
-void	ft_process(const char **start, const char **format, int *n, va_list args)
+void	ft_process(const char **start, const char **format, int *n,
+		va_list args)
 {
 	char	spe;
 
@@ -105,7 +94,7 @@ void	ft_process(const char **start, const char **format, int *n, va_list args)
 
 int	ft_printf(const char *format, ...)
 {
-	va_list	args;
+	va_list		args;
 	int			n;
 	const char	*start;
 
@@ -132,19 +121,18 @@ int	ft_printf(const char *format, ...)
 
 // int	main(void)
 // {
-// 	// compare various printf and ft_printf that use the same string or integer. print the function name before the output.
 // 	printf("変換指定子がない場合\n");
 // 	printf(" %d\n", printf("hello"));
 // 	printf(" %d\n\n", ft_printf("hello"));
-	
+
 // 	printf("変換指定子がcの場合\n");
 // 	printf(" %d\n", printf("c = %c", 'a'));
 // 	printf(" %d\n\n", ft_printf("c = %c", 'a'));
-	
+
 // 	printf("変換指定子がsの場合\n");
 // 	printf(" %d\n", printf("s = %s", "hello"));
 // 	printf(" %d\n\n", ft_printf("s = %s", "hello"));
-	
+
 // 	printf("変換指定子がpの場合\n");
 // 	printf(" %d\n", printf("p = %p\n", "hello"));
 // 	printf(" %d\n\n", ft_printf("p = %p\n", "hello"));
@@ -164,7 +152,7 @@ int	ft_printf(const char *format, ...)
 // 	printf("変換指定子がxの場合\n");
 // 	printf(" %d\n", printf("x = %x", 42));
 // 	printf(" %d\n\n", ft_printf("x = %x", 42));
-	
+
 // 	printf("変換指定子がXの場合\n");
 // 	printf(" %d\n", printf("X = %X", 42));
 // 	printf(" %d\n\n", ft_printf("X = %X", 42));
@@ -173,12 +161,3 @@ int	ft_printf(const char *format, ...)
 // 	printf(" %d\n", printf("%%"));
 // 	printf(" %d\n\n", ft_printf("%%"));
 // 	return (0);
-
-// int	main(void)
-// {
-// 	printf("%d\n", printf("%i ", -36));
-// 	printf("%d\n\n\n", ft_printf("%i ", -36));
-// 	printf("%d\n", printf("%i ", 36));
-// 	printf("%d\n\n\n", ft_printf("%i ", 36));
-// 	return (0);	
-// }
