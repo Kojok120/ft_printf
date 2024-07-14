@@ -6,7 +6,7 @@
 /*   By: kokamoto <kokamoto@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 11:24:56 by kokamoto          #+#    #+#             */
-/*   Updated: 2024/07/14 09:14:13 by kokamoto         ###   ########.fr       */
+/*   Updated: 2024/07/14 14:55:34 by kokamoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,10 @@ void	ft_process(const char **start, const char **format, int *n,
 	spe = ft_strchr_n("cspdiuxX%", **format);
 	if (spe == -1)
 	{
-		(*format) = *start;
+		(*start) = *format;
 		return ;
 	}
-	if (ft_strchr_n("csp%", spe) != -1)
+	if (spe == 'c' || spe == 's' || spe == 'p' || spe == '%')
 		ft_process_not_number(n, args, spe);
 	else
 		ft_process_number(n, args, spe);
